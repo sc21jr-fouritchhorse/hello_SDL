@@ -1,10 +1,10 @@
 OBJS	=	*.cpp
 CC	=	g++
 
-COMPILER_FLAGS	=  -fmax-errors=1 -Wall -Werror
+COMPILER_FLAGS	=  -fmax-errors=1 -Wall -Werror -g 
 LINKER_FLAGS	= -lSDL2 -lGLEW -lGL
 
-OBJ_NAME	= SDL_hello_window
+OBJ_NAME	= helloPolygons
 
 
 all	:$(OBJS)

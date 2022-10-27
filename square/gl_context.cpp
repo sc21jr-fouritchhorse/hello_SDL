@@ -48,7 +48,6 @@ gl_context::gl_context(int w, int h, int maj, int min) :
 
 gl_context::~gl_context()
 {
-
     SDL_GL_DeleteContext(context);
     SDL_Quit();
 }

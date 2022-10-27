@@ -5,7 +5,7 @@
 
 #include "gl_context.h"
 #include "environment.h"
-
+#include "buffer_objects.h"
 
 int main(int argc, char** argv)
 {
@@ -16,7 +16,7 @@ int main(int argc, char** argv)
         printf("Failed to create context!\n");
         return -1;
     }
-    printf("I've started rendering!\n");
+    buffer_object my_object("square.obj");
     my_render_loop.render(my_context.getWindow());
     return 0;
 }  

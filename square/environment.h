@@ -14,6 +14,7 @@ private:
     void default_input();
     SDL_Event input;
     bool shouldTerminate;
+    GLuint vao;
 };
 
 #endif
