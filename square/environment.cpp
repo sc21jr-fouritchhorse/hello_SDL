@@ -5,6 +5,11 @@ void environment::render(SDL_Window *win)
     while(!shouldTerminate)
     {
         default_input();
+        for(GLuint ao : vaos)
+        {
+            glBindVertexArray(ao);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+        }
         SDL_GL_SwapWindow(win);
     }
 }
