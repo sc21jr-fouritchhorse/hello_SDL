@@ -12,13 +12,16 @@ class array_object
 public:
     array_object();
     ~array_object();
-    void add_buffer(buffer_object);
+    void add_buffer(buffer_object*);
     void bind();
     void unbind();
     void enableAccess();
     GLuint getID() const { return ID; }
+    GLuint* pointer_getID() { return &ID; }
+    GLuint getVertCount() const { return vert_count; }
 private:
-    std::vector<buffer_object> myBuffers;
+    std::vector<buffer_object*> myBuffers;
+    GLuint vert_count;
     GLuint ID;
     GLint loc_position;
 };

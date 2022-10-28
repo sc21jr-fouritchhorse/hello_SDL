@@ -5,13 +5,14 @@ void environment::render(SDL_Window *win)
     while(!shouldTerminate)
     {
         default_input();
-        for(GLuint ao : vaos)
+        for(array_object *ao : vaos)
         {
-            glBindVertexArray(ao);
-            glDrawArrays(GL_TRIANGLES, 0, 3);
+            glBindVertexArray(ao->getID());
+            glDrawArrays(GL_TRIANGLES, 0, ao->getVertCount());
         }
         SDL_GL_SwapWindow(win);
     }
+    glBindVertexArray(0);
 }
 
 void environment::default_input()
@@ -30,3 +31,12 @@ void environment::set_input(SDL_Event my_event)
     input = my_event;
 }
 
+environment::~environment()
+{
+    for(array_object *a :vaos)
+    {
+        a->unbind();
+        glDeleteVertexArrays(1, a->pointer_getID());
+        delete a;
+    }
+}

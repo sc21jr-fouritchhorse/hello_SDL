@@ -12,6 +12,10 @@ void buffer_object::bind()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_ID);
 }
 
+void buffer_object::destroy()
+{
+    delete this;
+}
 
 void buffer_object::readFile()
 {
@@ -72,6 +76,7 @@ void buffer_object::readFile()
 
 buffer_object::buffer_object(const char *filename)
 {
+    destroyed = false;
     buffer_object_filename = filename;
     if(!filename)
     {
@@ -84,20 +89,19 @@ buffer_object::buffer_object(const char *filename)
 }
 
 
-buffer_object::~buffer_object()
-{
+buffer_object::~buffer_object() {
+    destroyed = true;
     printf("I'm deleting my buffers\n");
-    for (GLfloat *v: verts) {
-        if(v != nullptr) {
-            delete(v);
+    if (destroyed) {
+        for (GLfloat *v: verts) {
+            delete (v);
             v = nullptr;
         }
-    }
     for (GLuint *i: indices) {
-        if(i != nullptr) {
-            delete(i);
+        if (i != nullptr) {
             i = nullptr;
         }
+    }
     }
 }
 

@@ -8,11 +8,12 @@ class buffer_object
 {
 public:
     buffer_object(const char *filename);
+    ~buffer_object();
     void readFile();
     void write_buffer_object(const char *filename);
     void bind();
     void unbind();
-    ~buffer_object();
+    void destroy();
     int getVertCount() const { return verts.size(); }
     int getIndCount () const { return indices.size(); }
 private:
@@ -21,6 +22,7 @@ private:
     GLuint ebo_ID;
     std::vector<GLfloat*> verts;
     std::vector<GLuint*>  indices;
+    bool destroyed;
 };
 
 #endif

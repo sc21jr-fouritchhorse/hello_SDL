@@ -17,11 +17,11 @@ int main(int argc, char** argv)
         printf("Failed to create context!\n");
         return -1;
     }
-    array_object my_array;
-    my_array.bind();
-    my_render_loop.set_vao(my_array.getID());
-    buffer_object my_object("square.obj");
-    my_array.add_buffer(my_object);
+    array_object *my_array = new array_object();
+    my_array->bind();
+    my_render_loop.set_vao(my_array);
+    buffer_object* my_object = new buffer_object("square.obj");
+    my_array->add_buffer(my_object);
     my_render_loop.render(my_context.getWindow());
     return 0;
 }  
