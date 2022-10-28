@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 
 #include "buffer_objects.h"
+#include "shaderProgram.h"
 
 class array_object
 {
@@ -21,6 +22,7 @@ public:
     GLuint getVertCount() const { return vert_count; }
 private:
     std::vector<buffer_object*> myBuffers;
+    std::vector<shaderProgram*> myShaders;
     GLuint vert_count;
     GLuint ID;
     GLint loc_position;
