@@ -14,6 +14,7 @@ public:
     ~array_object();
     void add_buffer(buffer_object);
     void bind();
+    void unbind();
     void enableAccess();
     GLuint getID() const { return ID; }
 private:

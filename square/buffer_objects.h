@@ -11,6 +11,7 @@ public:
     void readFile();
     void write_buffer_object(const char *filename);
     void bind();
+    void unbind();
     ~buffer_object();
     int getVertCount() const { return verts.size(); }
     int getIndCount () const { return indices.size(); }

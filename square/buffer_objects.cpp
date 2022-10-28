@@ -1,5 +1,11 @@
 #include "buffer_objects.h"
 
+void buffer_object::unbind()
+{
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
 void buffer_object::bind()
 {
     glBindBuffer(GL_ARRAY_BUFFER, vbo_ID);
@@ -12,6 +18,8 @@ void buffer_object::readFile()
     verts = std::vector<GLfloat*>();
     indices = std::vector<GLuint*>();
 
+    GLfloat temp_vert[3];
+    GLuint temp_face[3];
     const int buffer_object_line_length = 50;
     char current_line[buffer_object_line_length];
     char current_first_char = ' ';
@@ -27,15 +35,17 @@ void buffer_object::readFile()
             switch(current_first_char)
             {
                 case 'v':
-                    GLfloat vert[3];
-                    fscanf(buffer_object_file, "%f %f %f", &vert[0], &vert[1], &vert[2]);
-                    verts.push_back(vert);
-                break;
+                    fscanf(buffer_object_file, "%f %f %f", &temp_vert[0], &temp_vert[1], &temp_vert[2]);
+                    verts.push_back((GLfloat*) malloc(3 * sizeof(GLfloat)));
+                    for(int i = 0; i < 3; i++)
+                        verts.back()[i] = temp_vert[i];
+                    break;
 
                 case 'f':
-                    GLuint face[3];
-                    fscanf(buffer_object_file, "%u %u %u", &face[0], &face[1], &face[2]);
-                    indices.push_back(face);
+                    fscanf(buffer_object_file, "%u %u %u", &temp_face[0], &temp_face[1], &temp_face[2]);
+                    indices.push_back((GLuint*) malloc(3 * sizeof(GLuint)));
+                    for(int i = 0; i < 3; i++)
+                        indices.back()[i] = temp_face[i];
                 break;
 
                 case '#':
@@ -53,6 +63,8 @@ void buffer_object::readFile()
 
         glBufferData(GL_ARRAY_BUFFER, verts.size() * (sizeof(GLfloat) * 3), verts.data(), GL_STATIC_DRAW);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * (sizeof(GLuint) * 3), indices.data(), GL_STATIC_DRAW);
+
+        unbind();
     }
 
         
@@ -74,16 +86,18 @@ buffer_object::buffer_object(const char *filename)
 
 buffer_object::~buffer_object()
 {
+    printf("I'm deleting my buffers\n");
     for (GLfloat *v: verts) {
-        for(int i = 0; i < 3; i++)
-            printf("\n%f\n", v[i]);
-        delete [] v;
+        if(v != nullptr) {
+            delete(v);
+            v = nullptr;
+        }
     }
     for (GLuint *i: indices) {
-        for(int j = 0; j < 3; j++)
-            printf("\n%d\n", i[j]);
-
-        delete [] i;
+        if(i != nullptr) {
+            delete(i);
+            i = nullptr;
+        }
     }
 }
 
