@@ -7,8 +7,11 @@ void environment::render(SDL_Window *win)
         default_input();
         for(array_object *ao : vaos)
         {
-            glBindVertexArray(ao->getID());
-            glDrawArrays(GL_TRIANGLES, 0, ao->getVertCount());
+            ao->bind();
+            for(buffer_object *b : ao->getBuffers())
+            {
+                b->render(ao);
+            }
         }
         SDL_GL_SwapWindow(win);
     }

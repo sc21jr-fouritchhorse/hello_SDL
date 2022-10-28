@@ -18,6 +18,6 @@ shaderProgram::~shaderProgram()
 {
     for(shader *s : shaders)
     {
-        delete s;
+        s->~shader();
     }
 }

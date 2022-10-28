@@ -30,7 +30,6 @@ array_object::~array_object()
 {
     for(buffer_object *b : myBuffers)
     {
-        b->unbind();
         b->destroy();
     }
 }

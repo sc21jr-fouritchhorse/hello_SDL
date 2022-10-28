@@ -5,12 +5,13 @@
 #ifndef SQUARE_SHADER_H
 #define SQUARE_SHADER_H
 
+
 #include <GL/glew.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 class shader {
 public:
-    shader();
     shader(const char *filename, GLenum type);
     ~shader();
     GLuint getID() const { return ID; }
@@ -19,7 +20,7 @@ public:
 private:
     void readFile();
     const char* filename;
-    const char* source;
+    char* source;
     GLenum type;
     GLuint ID;
 };

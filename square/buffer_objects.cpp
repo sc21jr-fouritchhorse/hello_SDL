@@ -12,6 +12,12 @@ void buffer_object::bind()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_ID);
 }
 
+void buffer_object::render(array_object *vao)
+{
+    glUseProgram(my_shader->getID());
+    glDrawElements(GL_TRIANGLES, getIndCount(), GL_FLOAT, indices.data());
+}
+
 void buffer_object::destroy()
 {
     delete this;
@@ -20,7 +26,7 @@ void buffer_object::destroy()
 void buffer_object::readFile()
 {
     verts = std::vector<GLfloat*>();
-    indices = std::vector<GLuint*>();
+    indices = std::vector<GLuint>();
 
     GLfloat temp_vert[3];
     GLuint temp_face[3];
@@ -46,11 +52,10 @@ void buffer_object::readFile()
                     break;
 
                 case 'f':
-                    fscanf(buffer_object_file, "%u %u %u", &temp_face[0], &temp_face[1], &temp_face[2]);
-                    indices.push_back((GLuint*) malloc(3 * sizeof(GLuint)));
-                    for(int i = 0; i < 3; i++)
-                        indices.back()[i] = temp_face[i];
-                break;
+                    while() {
+                        fscanf(buffer_object_file, "%d");
+                    }
+                    break;
 
                 case '#':
                     continue;
@@ -63,10 +68,15 @@ void buffer_object::readFile()
         glGenBuffers(1, &vbo_ID);
         glGenBuffers(1, &ebo_ID);
 
-        bind();
-
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_ID);
         glBufferData(GL_ARRAY_BUFFER, verts.size() * (sizeof(GLfloat) * 3), verts.data(), GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_ID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * (sizeof(GLuint) * 3), indices.data(), GL_STATIC_DRAW);
+
+
+        glVertexAttribPointer(0, getVertCount(), GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*) 0);
+        glEnableVertexAttribArray(0);
 
         unbind();
     }
@@ -90,19 +100,15 @@ buffer_object::buffer_object(const char *filename)
 
 
 buffer_object::~buffer_object() {
-    destroyed = true;
     printf("I'm deleting my buffers\n");
-    if (destroyed) {
-        for (GLfloat *v: verts) {
-            delete (v);
-            v = nullptr;
+        if (!destroyed) {
+            for (GLfloat *v: verts) {
+                delete (v);
+            }
         }
-    for (GLuint *i: indices) {
-        if (i != nullptr) {
-            i = nullptr;
-        }
-    }
-    }
+
+    destroyed = true;
+
 }
 
 

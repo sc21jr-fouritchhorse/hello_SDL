@@ -1,7 +1,7 @@
 #version 450
 
 layout (location = 0) in vec3 in_loc;
-out vec_col;
+out vec4  vec_col;
 
 void main()
 {

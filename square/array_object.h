@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __OBJ_H__
 #define __OBJ_H__
 
@@ -20,9 +21,9 @@ public:
     GLuint getID() const { return ID; }
     GLuint* pointer_getID() { return &ID; }
     GLuint getVertCount() const { return vert_count; }
+    std::vector<buffer_object*> getBuffers() const { return myBuffers; } 
 private:
     std::vector<buffer_object*> myBuffers;
-    std::vector<shaderProgram*> myShaders;
     GLuint vert_count;
     GLuint ID;
     GLint loc_position;

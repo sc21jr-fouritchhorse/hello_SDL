@@ -16,13 +16,18 @@ filename(myDir), type(myType)
     }
     else
     {
+        fseek(srcFile, 0, SEEK_END);
+        long size = ftell(srcFile);
+        rewind(srcFile);
+        source = (char*) malloc(sizeof(char) * size);
+        fread(source, 1, size, srcFile);
         glShaderSource(ID, 1, &source, NULL);
-
         printf("\n%s\n", source);
 
         glCompileShader(ID);
     }
 }
+
 
 shader::~shader()
 {

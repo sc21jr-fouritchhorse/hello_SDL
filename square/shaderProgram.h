@@ -9,6 +9,7 @@
 #include <vector>
 
 class shaderProgram {
+public:
     shaderProgram(std::vector<shader*> myShaders);
     ~shaderProgram();
     GLuint getID() const { return ID; }
