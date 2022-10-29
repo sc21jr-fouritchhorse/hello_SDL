@@ -23,6 +23,7 @@ private:
     char* source;
     GLenum type;
     GLuint ID;
+    char infoLog[512];
 };
 
 

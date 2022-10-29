@@ -15,7 +15,7 @@ void buffer_object::bind()
 void buffer_object::render(array_object *vao)
 {
     glUseProgram(my_shader->getID());
-    glDrawElements(GL_TRIANGLES, getIndCount(), GL_FLOAT, indices.data());
+    glDrawElements(GL_TRIANGLES, getIndCount(), GL_UNSIGNED_INT, indices.data());
 }
 
 void buffer_object::destroy()
@@ -29,10 +29,8 @@ void buffer_object::readFile()
     indices = std::vector<GLuint>();
 
     GLfloat temp_vert[3];
-    GLuint temp_face[3];
     const int buffer_object_line_length = 50;
     char current_line[buffer_object_line_length];
-    char current_first_char = ' ';
     FILE *buffer_object_file = fopen(buffer_object_filename, "r");
     if(!buffer_object_file)
         return;
@@ -40,7 +38,7 @@ void buffer_object::readFile()
     {
         while(fscanf(buffer_object_file, "%s", current_line) > 0)
         {
-            current_first_char = current_line[0];
+            char current_first_char = current_line[0];
 
             switch(current_first_char)
             {
@@ -52,8 +50,9 @@ void buffer_object::readFile()
                     break;
 
                 case 'f':
-                    while() {
-                        fscanf(buffer_object_file, "%d");
+                    GLuint index;
+                    while( fscanf(buffer_object_file, "%d ", &index) == 1) {
+                       indices.push_back(index);
                     }
                     break;
 
@@ -72,11 +71,18 @@ void buffer_object::readFile()
         glBufferData(GL_ARRAY_BUFFER, verts.size() * (sizeof(GLfloat) * 3), verts.data(), GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_ID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * (sizeof(GLuint) * 3), indices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 
 
         glVertexAttribPointer(0, getVertCount(), GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*) 0);
         glEnableVertexAttribArray(0);
+
+
+        glVertexAttribPointer(1, getVertCount(), GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*) 0);
+        glEnableVertexAttribArray(1);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         unbind();
     }
@@ -106,7 +112,12 @@ buffer_object::~buffer_object() {
                 delete (v);
             }
         }
-
+    printf("My indices: ");
+    for(GLuint i : indices)
+    {
+        printf("%d", i);
+    }
+    printf("\n");
     destroyed = true;
 
 }

@@ -9,15 +9,17 @@ shaderProgram::shaderProgram(std::vector<shader*> myShaders) : shaders(myShaders
     ID = glCreateProgram();
     for(shader *s : myShaders)
     {
-        glAttachShader(s->getID(), ID);
+        glAttachShader(ID, s->getID());
+        s->~shader();
     }
     glLinkProgram(ID);
+    glGetProgramInfoLog(ID, 512, NULL, infoLog);
+    printf("%s\n", infoLog);
 }
+
+
 
 shaderProgram::~shaderProgram()
 {
-    for(shader *s : shaders)
-    {
-        s->~shader();
-    }
+    glDeleteProgram(ID);
 }

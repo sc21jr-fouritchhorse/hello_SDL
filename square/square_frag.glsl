@@ -1,9 +1,10 @@
 #version 450 core
 
-in vec4 vertCol;
+layout (location = 1) in vec4 vertexColor;
 out vec4 FragColor;
+
 
 void main()
 {
-    FragColor = vertCol;
+    FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);
 }

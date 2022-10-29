@@ -17,6 +17,8 @@ public:
 private:
     std::vector<shader*> shaders;
     GLuint ID;
+
+    char infoLog[512];
 };
 
 

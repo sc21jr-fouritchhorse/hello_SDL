@@ -19,7 +19,6 @@ int main(int argc, char** argv)
         printf("Failed to create context!\n");
         return -1;
     }
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     array_object* my_array = new array_object();
     my_array->bind();
     my_render_loop.set_vao(my_array);

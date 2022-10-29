@@ -1,7 +1,7 @@
-#version 450
+#version 450 core
 
 layout (location = 0) in vec3 in_loc;
-out vec4  vec_col;
+layout (location = 1) out vec4  vec_col;
 
 void main()
 {
