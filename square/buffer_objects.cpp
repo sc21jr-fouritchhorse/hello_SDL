@@ -12,15 +12,16 @@ void buffer_object::bind()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_ID);
 }
 
-void buffer_object::render(array_object *vao)
+void buffer_object::render()
 {
     glUseProgram(my_shader->getID());
+    bind();
     glDrawElements(GL_TRIANGLES, getIndCount(), GL_UNSIGNED_INT, indices.data());
 }
 
 void buffer_object::destroy()
 {
-    delete this;
+    this->~buffer_object();
 }
 
 void buffer_object::readFile()
@@ -32,9 +33,11 @@ void buffer_object::readFile()
     const int buffer_object_line_length = 50;
     char current_line[buffer_object_line_length];
     FILE *buffer_object_file = fopen(buffer_object_filename, "r");
-    if(!buffer_object_file)
+    if(!buffer_object_file) {
+        fclose(buffer_object_file);
         return;
-    else 
+    }
+    else
     {
         while(fscanf(buffer_object_file, "%s", current_line) > 0)
         {
@@ -62,7 +65,7 @@ void buffer_object::readFile()
                     break;
             }
         }
-        
+        fclose(buffer_object_file);
         printf("I've read my buffers!\n");
         glGenBuffers(1, &vbo_ID);
         glGenBuffers(1, &ebo_ID);
@@ -73,49 +76,62 @@ void buffer_object::readFile()
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_ID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 
-
-        glVertexAttribPointer(0, getVertCount(), GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*) 0);
-        glEnableVertexAttribArray(0);
-
-
-        glVertexAttribPointer(1, getVertCount(), GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*) 0);
-        glEnableVertexAttribArray(1);
-
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        unbind();
+
+        printf("My verts are: ");
+        for (GLfloat *v: verts) {
+            printf("%f, %f, %f\n", v[0], v[1], v[2]);
+        }
+
+
+        printf("My indices: ");
+        for(GLuint i : indices)
+        {
+            printf("%d, ", i);
+        }
+        printf("\n");
+
     }
 
-        
+
 }
 
-buffer_object::buffer_object(const char *filename)
+buffer_object::buffer_object(const char *filename, shaderProgram *shaders)
 {
     destroyed = false;
     buffer_object_filename = filename;
+    my_shader = shaders;
     if(!filename)
     {
         return;
     }
-    else 
+    else
     {
         readFile();
     }
 }
 
+void buffer_object::shader_setup()
+{
+    glEnableVertexAttribArray(glGetAttribLocation(my_shader->getID(), "in_loc"));
+    glEnableVertexAttribArray(glGetAttribLocation(my_shader->getID(), "vec_col"));
+}
 
 buffer_object::~buffer_object() {
     printf("I'm deleting my buffers\n");
         if (!destroyed) {
+            printf("My verts are: ");
             for (GLfloat *v: verts) {
+                printf("%f, %f, %f\n", v[0], v[1], v[2]);
                 delete (v);
             }
         }
     printf("My indices: ");
     for(GLuint i : indices)
     {
-        printf("%d", i);
+        printf("%d, ", i);
     }
     printf("\n");
     destroyed = true;

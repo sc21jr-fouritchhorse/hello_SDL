@@ -19,14 +19,15 @@ int main(int argc, char** argv)
         printf("Failed to create context!\n");
         return -1;
     }
+    glClearColor(0.7f, 0.6f, 0.2f, 1.0f);
     array_object* my_array = new array_object();
     my_array->bind();
-    my_render_loop.set_vao(my_array);
-    buffer_object* my_object = new buffer_object("square.obj");
     std::vector<shader*> myShaders;
+    my_render_loop.set_vao(my_array);
     myShaders.push_back(new shader("square_vert.glsl", GL_VERTEX_SHADER));
     myShaders.push_back(new shader("square_frag.glsl", GL_FRAGMENT_SHADER));
-    my_object->my_shader = new shaderProgram(myShaders);
+    shaderProgram *my_program = new shaderProgram(myShaders);
+    buffer_object* my_object = new buffer_object("square.obj", my_program);
     my_array->add_buffer(my_object);
     my_render_loop.render(my_context.getWindow());
     return 0;

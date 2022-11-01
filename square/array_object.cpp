@@ -3,8 +3,10 @@
  array_object::array_object()
 {
     vert_count = 0;
+    element_count = 0;
     glGenVertexArrays(1, &ID);
 }
+
 
 void array_object::bind()
 {
@@ -19,11 +21,8 @@ void array_object::unbind()
 void array_object::add_buffer(buffer_object* buffer)
 {
     myBuffers.push_back(buffer);
-
-    for(buffer_object *b : myBuffers)
-    {
-        vert_count += b->getVertCount();
-    }
+    vert_count += buffer->getVertCount();
+    element_count += buffer->getIndCount();
 }
 
 array_object::~array_object()

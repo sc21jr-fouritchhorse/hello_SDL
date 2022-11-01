@@ -9,6 +9,8 @@
 #include <GL/glew.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 
 class shader {
 public:
@@ -20,10 +22,10 @@ public:
 private:
     void readFile();
     const char* filename;
-    char* source;
     GLenum type;
     GLuint ID;
     char infoLog[512];
+    char* source;
 };
 
 

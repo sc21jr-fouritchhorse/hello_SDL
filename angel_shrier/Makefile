@@ -1,7 +1,7 @@
 OBJS	=	*.cpp
 CC	=	g++
 
-COMPILER_FLAGS	=  -fmax-errors=1 -Wall -Werror -g
+COMPILER_FLAGS	=  -fmax-errors=1  -Wall -Werror -g
 LINKER_FLAGS	= -lSDL2 -lGLEW -lGL
 
 OBJ_NAME	= helloPolygons

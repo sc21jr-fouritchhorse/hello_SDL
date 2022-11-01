@@ -5,16 +5,8 @@ void environment::render(SDL_Window *win)
     while(!shouldTerminate)
     {
         default_input();
-        for(array_object *ao : vaos)
-        {
-            glClear(GL_COLOR_BUFFER_BIT);
-            ao->bind();
-            for(buffer_object *b : ao->getBuffers())
-            {
-                b->render();
-            }
-            SDL_GL_SwapWindow(win);
-        }
+        glClear(GL_COLOR_BUFFER_BIT);
+        SDL_GL_SwapWindow(win);
     }
     glBindVertexArray(0);
 }
@@ -37,10 +29,5 @@ void environment::set_input(SDL_Event my_event)
 
 environment::~environment()
 {
-    for(array_object *a :vaos)
-    {
-        a->unbind();
-        glDeleteVertexArrays(1, a->pointer_getID());
-        delete a;
-    }
+
 }

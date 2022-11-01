@@ -19,11 +19,12 @@ filename(myDir), type(myType)
     {
         fseek(srcFile, 0, SEEK_END);
         int size = ftell(srcFile);
-        rewind(srcFile);
-        source = (char*) malloc(sizeof(char) * size);
-        fread(source, 1, size, srcFile);
+        fseek(srcFile, 0, SEEK_SET);
+        source =  new char[size + 1];
+        fread(source,  1, size, srcFile);
         fclose(srcFile);
-        glShaderSource(ID, 1, &source, NULL);
+        const char* mySrc = const_cast<const GLchar*>(source);
+        glShaderSource(ID, 1, &mySrc, (const GLint*) &size);
         source[size] = '\0';
         printf("\n%s\n", source);
         glCompileShader(ID);
@@ -35,5 +36,6 @@ filename(myDir), type(myType)
 
 shader::~shader()
 {
+    delete [] source;
     glDeleteShader(ID);
 }

@@ -13,14 +13,15 @@ class array_object;
 class buffer_object
 {
 public:
-    buffer_object(const char *filename);
+    buffer_object(const char *filename, shaderProgram* shader);
     ~buffer_object();
     void readFile();
     void write_buffer_object(const char *filename);
     void bind();
     void unbind();
-    void render(array_object* vao);
+    void render();
     void destroy();
+    void shader_setup();
     int getVertCount() const { return verts.size(); }
     int getIndCount () const { return indices.size(); }
     shaderProgram *my_shader;
