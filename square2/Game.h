@@ -18,12 +18,17 @@ protected:
     void ProcessInput();
     virtual void MyInput() {}
     void Update();
-    virtual void MyUpdate() {}
+    virtual void MyUpdate(float deltaTime) {}
     void Render();
     virtual void MyRender() {}
     RenderSurface* mySurface;
     bool mIsRunning;
     SDL_Event myEvent;
+    float tickCount;
+private:
+    const float deltaDenominator = 10000.0f;
+    const float deltaClamp = 0.05f;
+    const uint frameTime = 32;
 };
 
 #endif

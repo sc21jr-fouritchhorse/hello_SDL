@@ -1,8 +1,8 @@
-#include "Game.h"
+#include "Pong.h"
 
 int main(int argc, char** argv)
 {
-    Game* game = new Game(640, 480);
+    Pong* game = new Pong();
     game->RunLoop();
     return 0;
 }
