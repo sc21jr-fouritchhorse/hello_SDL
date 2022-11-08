@@ -1,5 +1,10 @@
 #include "buffer_objects.h"
 
+buffer_object::buffer_object(const char *filename, shaderProgram* shader)
+{
+
+}
+
 void buffer_object::unbind()
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);

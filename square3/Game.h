@@ -5,23 +5,21 @@
 
 #include <SDL2/SDL.h>
 #include "RenderSurface.h"
+#include "Actor.h"
 
 class Game
 {
 public:
     Game(int, int);
     ~Game();
-    virtual void Initialize() {}
     void RunLoop();
     void Shutdown();
 protected:
     void ProcessInput();
-    virtual void MyInput() {}
     void Update();
-    virtual void MyUpdate(float deltaTime) {}
     void Render();
-    virtual void MyRender() {}
     RenderSurface* mySurface;
+    std::vector<Actor*> myActors;
     bool mIsRunning;
     SDL_Event myEvent;
     float tickCount;

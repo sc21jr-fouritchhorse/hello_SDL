@@ -4,15 +4,21 @@ Game::Game(int width=640, int height=480)
 {
     mIsRunning = true;
     mySurface = new RenderSurface(width, height);
-    Initialize();
+
+    for(Actor *a : myActors)
+        for(Component *c : a->components)
+            c->Init();
 }
 
 
 void Game::Render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    MyRender();
     SDL_GL_SwapWindow(mySurface->getWindow());
+
+    for(Actor *a : myActors)
+        for(Component *c : a->components)
+            c->Draw();
 }
 
 void Game::ProcessInput()
@@ -21,7 +27,10 @@ void Game::ProcessInput()
     if(myEvent.type == SDL_QUIT || 
     (myEvent.type == SDL_KEYUP && myEvent.key.keysym.sym == SDLK_ESCAPE))
         mIsRunning = false;
-    MyInput();
+
+    for(Actor *a : myActors)
+        for(Component *c : a->components)
+            c->GetInput();
 }
 
 void Game::Update()
@@ -40,8 +49,11 @@ void Game::Update()
     tickCount = SDL_GetTicks();
 
     //Iterate through the entities
+    for(Actor *a : myActors)
         //Iterate through the components of each entity
-            //We only care about super classes: i.e. what the entity is etc
+        for(Component *c : a->components)
+            c->Update();
+            //We only care about super classes: i.e. what the entity is etc doesn't matter
 }
 
 void Game::RunLoop()
@@ -55,7 +67,13 @@ void Game::RunLoop()
 
 Game::~Game()
 {
+
+    for(Actor *a : myActors)
+        for(Component *c : a->components)
+            c->Destroy();
+            
     mySurface->~RenderSurface();
+
 }
 
 
